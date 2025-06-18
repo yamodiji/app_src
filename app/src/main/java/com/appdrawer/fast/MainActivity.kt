@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.activity.OnBackPressedCallback
 import com.appdrawer.fast.adapters.AppAdapter
 import com.appdrawer.fast.database.AppDatabase
 import com.appdrawer.fast.models.AppInfo
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         setupRecyclerView()
         setupSearch()
+        setupBackPress()
         
         // Load apps on first launch
         lifecycleScope.launch {
@@ -230,11 +232,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    override fun onBackPressed() {
-        if (searchEditText.text.isNotEmpty()) {
-            searchEditText.text.clear()
-        } else {
-            super.onBackPressed()
-        }
+    private fun setupBackPress() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (searchEditText.text.isNotEmpty()) {
+                    searchEditText.text.clear()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 } 

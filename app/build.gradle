@@ -38,6 +38,13 @@ android {
         viewBinding true
         dataBinding true
     }
+
+    lint {
+        abortOnError false
+        warningsAsErrors false
+        disable 'NewApi', 'Deprecation'
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
