@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Widget Position Options -->
+    <string-array name="widget_position_entries">
+        <item>Top Center</item>
+        <item>Top Left</item>
+        <item>Top Right</item>
+        <item>Center</item>
+        <item>Bottom Center</item>
+    </string-array>
+    
+    <string-array name="widget_position_values">
+        <item>top_center</item>
+        <item>top_left</item>
+        <item>top_right</item>
+        <item>center</item>
+        <item>bottom_center</item>
+    </string-array>
+    
+    <!-- Theme Options -->
     <string-array name="theme_entries">
+        <item>System Default</item>
         <item>Light</item>
         <item>Dark</item>
-        <item>Auto (Follow system)</item>
+        <item>Pure Black (AMOLED)</item>
     </string-array>
-
+    
     <string-array name="theme_values">
+        <item>system</item>
         <item>light</item>
         <item>dark</item>
-        <item>auto</item>
+        <item>black</item>
     </string-array>
     
-    <!-- Widget position options -->
-    <string-array name="position_entries">
-        <item>Left edge</item>
-        <item>Right edge</item>
-        <item>Top center</item>
-        <item>Bottom center</item>
+    <!-- Legacy Arrays (keeping for compatibility) -->
+    <string-array name="search_algorithms">
+        <item>Fuzzy Search</item>
+        <item>T9 Search</item>
+        <item>Exact Match</item>
     </string-array>
     
-    <string-array name="position_values">
-        <item>left</item>
-        <item>right</item>
-        <item>top</item>
-        <item>bottom</item>
-    </string-array>
-    
-    <!-- Widget opacity options -->
-    <string-array name="opacity_entries">
-        <item>30% - Very transparent</item>
-        <item>40% - Transparent</item>
-        <item>50% - Half transparent</item>
-        <item>60% - Slightly transparent</item>
-        <item>70% - Mostly opaque</item>
-        <item>80% - Nearly opaque</item>
-        <item>85% - Default</item>
-        <item>90% - Almost solid</item>
-        <item>100% - Solid</item>
-    </string-array>
-    
-    <string-array name="opacity_values">
-        <item>30</item>
-        <item>40</item>
-        <item>50</item>
-        <item>60</item>
-        <item>70</item>
-        <item>80</item>
-        <item>85</item>
-        <item>90</item>
-        <item>100</item>
+    <string-array name="search_algorithm_values">
+        <item>fuzzy</item>
+        <item>t9</item>
+        <item>exact</item>
     </string-array>
 </resources> 

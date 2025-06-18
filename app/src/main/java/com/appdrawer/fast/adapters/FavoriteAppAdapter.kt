@@ -53,18 +53,10 @@ class FavoriteAppAdapter(
         fun bind(app: AppInfo) {
             nameTextView.text = app.appName
             
-            // Set app icon with fallback
-            try {
-                if (app.icon != null) {
-                    iconImageView.setImageDrawable(app.icon)
-                } else {
-                    // Try to load icon from package manager
-                    val pm = itemView.context.packageManager
-                    val appIcon = pm.getApplicationIcon(app.packageName)
-                    iconImageView.setImageDrawable(appIcon)
-                }
-            } catch (e: Exception) {
-                // Fallback to default icon
+            // Set app icon
+            if (app.icon != null) {
+                iconImageView.setImageDrawable(app.icon)
+            } else {
                 iconImageView.setImageResource(R.drawable.ic_default_app)
             }
             

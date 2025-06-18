@@ -23,4 +23,7 @@
     <!-- Section colors -->
     <color name="favorite_section_bg">#F8F9FA</color>
     <color name="recent_section_bg">#F5F5F5</color>
+    
+    <!-- Overlay colors -->
+    <color name="overlay_background">#80000000</color> <!-- 50% transparent black -->
 </resources> 

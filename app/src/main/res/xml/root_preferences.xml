@@ -1,99 +1,200 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="Search">
-        
+    <!-- Floating Widget Settings -->
+    <PreferenceCategory
+        android:title="Floating Widget"
+        android:icon="@drawable/ic_search">
+
         <SwitchPreferenceCompat
-            app:key="fuzzy_search"
-            app:title="Enable fuzzy search"
-            app:summary="Find apps even with typos"
-            app:defaultValue="true" />
-            
-        <SwitchPreferenceCompat
-            app:key="t9_search"
-            app:title="Enable T9 search"
-            app:summary="Search apps using number keypad"
-            app:defaultValue="true" />
-            
-        <SwitchPreferenceCompat
-            app:key="package_search"
-            app:title="Search package names"
-            app:summary="Include package names in search"
-            app:defaultValue="true" />
+            android:key="floating_widget_enabled"
+            android:title="Enable Floating Widget"
+            android:summary="Show always-on-screen search widget"
+            android:defaultValue="true" />
+
+        <ListPreference
+            android:key="widget_position"
+            android:title="Widget Position"
+            android:summary="Where to place the floating widget"
+            android:entries="@array/widget_position_entries"
+            android:entryValues="@array/widget_position_values"
+            android:defaultValue="top_center"
+            android:dependency="floating_widget_enabled" />
+
+        <SeekBarPreference
+            android:key="widget_opacity"
+            android:title="Widget Opacity"
+            android:summary="Adjust widget transparency"
+            android:max="100"
+            android:defaultValue="90"
+            android:dependency="floating_widget_enabled" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Display">
-        
+    <!-- Gesture Settings -->
+    <PreferenceCategory
+        android:title="Gesture Controls"
+        android:icon="@drawable/ic_gesture">
+
         <SwitchPreferenceCompat
-            app:key="show_favorites"
-            app:title="Show favorite icons"
-            app:summary="Display star icon for favorite apps"
-            app:defaultValue="true" />
-            
-        <ListPreference
-            app:key="theme"
-            app:title="Theme"
-            app:summary="Choose app theme"
-            app:entries="@array/theme_entries"
-            app:entryValues="@array/theme_values"
-            app:defaultValue="auto"
-            app:useSimpleSummaryProvider="true" />
+            android:key="swipe_gesture_enabled"
+            android:title="Swipe-Up Gesture"
+            android:summary="Open app drawer with swipe up from home screen"
+            android:defaultValue="true" />
+
+        <SeekBarPreference
+            android:key="gesture_sensitivity"
+            android:title="Gesture Sensitivity"
+            android:summary="Adjust how sensitive the swipe gesture is"
+            android:max="100"
+            android:defaultValue="50"
+            android:dependency="swipe_gesture_enabled" />
+
+        <SwitchPreferenceCompat
+            android:key="vibration_enabled"
+            android:title="Haptic Feedback"
+            android:summary="Vibrate when gestures are triggered"
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Behavior">
-        
+    <!-- Appearance Settings -->
+    <PreferenceCategory
+        android:title="Appearance"
+        android:icon="@drawable/ic_palette">
+
+        <ListPreference
+            android:key="app_theme"
+            android:title="App Theme"
+            android:summary="Choose your preferred theme"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
+            android:defaultValue="system" />
+
         <SwitchPreferenceCompat
-            app:key="close_after_launch"
-            app:title="Close after app launch"
-            app:summary="Automatically close drawer after launching an app"
-            app:defaultValue="true" />
-            
-        <SwitchPreferenceCompat
-            app:key="show_recent_apps"
-            app:title="Show recent apps"
-            app:summary="Display recently used apps when search is empty"
-            app:defaultValue="true" />
+            android:key="grid_view_enabled"
+            android:title="Grid View"
+            android:summary="Display apps in grid instead of list"
+            android:defaultValue="true" />
+
+        <SeekBarPreference
+            android:key="grid_columns"
+            android:title="Grid Columns"
+            android:summary="Number of columns in grid view"
+            android:min="2"
+            android:max="6"
+            android:defaultValue="4"
+            android:dependency="grid_view_enabled" />
+
+        <SeekBarPreference
+            android:key="animation_speed"
+            android:title="Animation Speed"
+            android:summary="Speed of drawer animations"
+            android:max="100"
+            android:defaultValue="50" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Floating Widget">
-        
+    <!-- Search & Behavior -->
+    <PreferenceCategory
+        android:title="Search & Behavior"
+        android:icon="@drawable/ic_search">
+
         <SwitchPreferenceCompat
-            app:key="enable_floating_widget"
-            app:title="Enable floating widget"
-            app:summary="Show floating search icon on screen"
-            app:defaultValue="true" />
-            
+            android:key="show_recent_apps"
+            android:title="Show Recent Apps"
+            android:summary="Display recently used apps in a separate section"
+            android:defaultValue="true" />
+
         <SwitchPreferenceCompat
-            app:key="enable_swipe_gesture"
-            app:title="Enable swipe-up gesture"
-            app:summary="Swipe up from bottom to open app drawer"
-            app:defaultValue="true" />
-            
+            android:key="predictive_search"
+            android:title="Predictive Search"
+            android:summary="Show frequently used apps first in search results"
+            android:defaultValue="true" />
+
         <SwitchPreferenceCompat
-            app:key="gesture_vibration"
-            app:title="Vibration feedback"
-            app:summary="Vibrate when gesture is triggered"
-            app:defaultValue="true" />
-            
-        <ListPreference
-            app:key="widget_position"
-            app:title="Widget position"
-            app:summary="Choose where floating widget appears"
-            app:entries="@array/position_entries"
-            app:entryValues="@array/position_values"
-            app:defaultValue="right"
-            app:useSimpleSummaryProvider="true" />
-            
-        <ListPreference
-            app:key="widget_opacity"
-            app:title="Widget opacity"
-            app:summary="Adjust transparency of floating widget"
-            app:entries="@array/opacity_entries"
-            app:entryValues="@array/opacity_values"
-            app:defaultValue="85"
-            app:useSimpleSummaryProvider="true" />
+            android:key="voice_search_enabled"
+            android:title="Voice Search"
+            android:summary="Enable microphone icon for voice search"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
+            android:key="auto_hide_widget"
+            android:title="Auto-hide Widget"
+            android:summary="Hide floating widget during full-screen apps"
+            android:defaultValue="true" />
+
+        <SeekBarPreference
+            android:key="auto_hide_timeout"
+            android:title="Auto-hide Timeout"
+            android:summary="Minutes of inactivity before hiding widget"
+            android:min="1"
+            android:max="60"
+            android:defaultValue="10"
+            android:dependency="auto_hide_widget" />
+
+    </PreferenceCategory>
+
+    <!-- Permissions -->
+    <PreferenceCategory
+        android:title="Permissions"
+        android:icon="@drawable/ic_security">
+
+        <Preference
+            android:key="overlay_permission"
+            android:title="Draw Over Other Apps"
+            android:summary="Required for floating widget and overlay" />
+
+        <Preference
+            android:key="accessibility_permission"
+            android:title="Accessibility Service"
+            android:summary="Optional: Better gesture detection" />
+
+        <Preference
+            android:key="usage_stats_permission"
+            android:title="Usage Access"
+            android:summary="Optional: Show recent apps based on usage" />
+
+    </PreferenceCategory>
+
+    <!-- Advanced Settings -->
+    <PreferenceCategory
+        android:title="Advanced"
+        android:icon="@drawable/ic_settings">
+
+        <SwitchPreferenceCompat
+            android:key="start_on_boot"
+            android:title="Start on Boot"
+            android:summary="Automatically start services when device boots"
+            android:defaultValue="true" />
+
+        <SwitchPreferenceCompat
+            android:key="debug_mode"
+            android:title="Debug Mode"
+            android:summary="Enable additional logging for troubleshooting"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="reset_settings"
+            android:title="Reset to Defaults"
+            android:summary="Reset all settings to their default values" />
+
+    </PreferenceCategory>
+
+    <!-- About -->
+    <PreferenceCategory
+        android:title="About">
+
+        <Preference
+            android:key="app_version"
+            android:title="Version"
+            android:summary="Fast App Drawer v1.0.0" />
+
+        <Preference
+            android:key="privacy_policy"
+            android:title="Privacy Policy"
+            android:summary="View our privacy policy" />
 
     </PreferenceCategory>
 

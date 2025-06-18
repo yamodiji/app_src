@@ -13,4 +13,23 @@
     <string name="app_info">App info</string>
     <string name="no_apps_found">No apps found</string>
     <string name="search_hint">Type to search for apps by name, alias, or T9</string>
+
+    <!-- Floating Widget -->
+    <string name="voice_search">Voice search</string>
+    <string name="overlay_background">Overlay background</string>
+    
+    <!-- Accessibility -->
+    <string name="accessibility_service_description">Detects swipe-up gestures from home screen to open Fast App Drawer. This service does not collect or transmit any personal data.</string>
+    
+    <!-- Permissions -->
+    <string name="permission_overlay_title">Draw Over Other Apps</string>
+    <string name="permission_overlay_summary">Required for floating widget and app drawer overlay</string>
+    <string name="permission_accessibility_title">Accessibility Service</string>
+    <string name="permission_accessibility_summary">Optional: Enables better gesture detection</string>
+    
+    <!-- App Drawer Overlay -->
+    <string name="close">Close</string>
+    <string name="favorite_apps">Favorite Apps</string>
+    <string name="recent_apps">Recent Apps</string>
+    <string name="all_apps">All Apps</string>
 </resources> 
