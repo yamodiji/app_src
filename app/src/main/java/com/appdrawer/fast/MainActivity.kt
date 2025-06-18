@@ -52,10 +52,8 @@ class MainActivity : AppCompatActivity() {
         setupSearch()
         setupBackPress()
         
-        // Load apps on first launch
-        lifecycleScope.launch {
-            viewModel.refreshApps()
-        }
+        // Load apps on first launch and handle permissions
+        requestPermissionsAndLoadApps()
     }
     
     private fun setupViews() {
@@ -118,8 +116,13 @@ class MainActivity : AppCompatActivity() {
         
         // Observe all apps and organize into sections
         viewModel.allApps.observe(this) { apps ->
-            if (searchEditText.text.isEmpty()) {
-                organizeSections(apps)
+            if (apps.isNotEmpty()) {
+                if (searchEditText.text.isEmpty()) {
+                    organizeSections(apps)
+                } else {
+                    // Re-perform search with new app list
+                    performSearch(searchEditText.text.toString().trim())
+                }
             }
         }
     }
@@ -132,15 +135,31 @@ class MainActivity : AppCompatActivity() {
         val otherApps = apps.filter { !it.isFavorite && !recentApps.contains(it) }
             .sortedBy { it.appName }
         
+        // Debug logging
+        println("Fast App Drawer - Total apps: ${apps.size}")
+        println("Fast App Drawer - Favorite apps: ${favoriteApps.size}")
+        println("Fast App Drawer - Recent apps: ${recentApps.size}")
+        println("Fast App Drawer - Other apps: ${otherApps.size}")
+        
         favoriteAppAdapter.submitList(favoriteApps)
         recentAppAdapter.submitList(recentApps)
         appAdapter.submitList(otherApps)
+        
+        // Hide loading state when apps are loaded
+        hideLoadingState()
         
         // Show/hide sections based on content
         findViewById<LinearLayout>(R.id.favoriteSection).visibility = 
             if (favoriteApps.isNotEmpty()) View.VISIBLE else View.GONE
         findViewById<LinearLayout>(R.id.recentSection).visibility = 
             if (recentApps.isNotEmpty()) View.VISIBLE else View.GONE
+        findViewById<LinearLayout>(R.id.allAppsSection).visibility = View.VISIBLE
+            
+        // If no apps at all, show message
+        if (apps.isEmpty()) {
+            showLoadingState()
+            Toast.makeText(this, "No apps found. Make sure permissions are granted.", Toast.LENGTH_LONG).show()
+        }
     }
     
     private fun setupSearch() {
@@ -275,5 +294,33 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+    
+    private fun requestPermissionsAndLoadApps() {
+        // Load apps immediately and show loading state
+        showLoadingState()
+        
+        lifecycleScope.launch {
+            try {
+                viewModel.refreshApps()
+                hideLoadingState()
+            } catch (e: Exception) {
+                hideLoadingState()
+                Toast.makeText(this@MainActivity, "Error loading apps: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+    
+    private fun showLoadingState() {
+        // Show empty state
+        findViewById<LinearLayout>(R.id.emptyState).visibility = View.VISIBLE
+        findViewById<LinearLayout>(R.id.favoriteSection).visibility = View.GONE
+        findViewById<LinearLayout>(R.id.recentSection).visibility = View.GONE
+        findViewById<LinearLayout>(R.id.allAppsSection).visibility = View.GONE
+    }
+    
+    private fun hideLoadingState() {
+        // Hide empty state
+        findViewById<LinearLayout>(R.id.emptyState).visibility = View.GONE
     }
 } 
