@@ -1,0 +1,60 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Search">
+        
+        <SwitchPreferenceCompat
+            app:key="fuzzy_search"
+            app:title="Enable fuzzy search"
+            app:summary="Find apps even with typos"
+            app:defaultValue="true" />
+            
+        <SwitchPreferenceCompat
+            app:key="t9_search"
+            app:title="Enable T9 search"
+            app:summary="Search apps using number keypad"
+            app:defaultValue="true" />
+            
+        <SwitchPreferenceCompat
+            app:key="package_search"
+            app:title="Search package names"
+            app:summary="Include package names in search"
+            app:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Display">
+        
+        <SwitchPreferenceCompat
+            app:key="show_favorites"
+            app:title="Show favorite icons"
+            app:summary="Display star icon for favorite apps"
+            app:defaultValue="true" />
+            
+        <ListPreference
+            app:key="theme"
+            app:title="Theme"
+            app:summary="Choose app theme"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:defaultValue="auto"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Behavior">
+        
+        <SwitchPreferenceCompat
+            app:key="close_after_launch"
+            app:title="Close after app launch"
+            app:summary="Automatically close drawer after launching an app"
+            app:defaultValue="true" />
+            
+        <SwitchPreferenceCompat
+            app:key="show_recent_apps"
+            app:title="Show recent apps"
+            app:summary="Display recently used apps when search is empty"
+            app:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen> 

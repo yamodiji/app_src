@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/widgetButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/search_apps"
+        android:textColor="@color/text_primary"
+        android:background="@android:color/transparent"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
+        android:gravity="start|center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
+
+</LinearLayout> 
