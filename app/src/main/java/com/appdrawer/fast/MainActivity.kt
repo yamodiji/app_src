@@ -1,7 +1,9 @@
 package com.appdrawer.fast
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -11,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +26,7 @@ import com.appdrawer.fast.adapters.AppAdapter
 import com.appdrawer.fast.adapters.FavoriteAppAdapter
 import com.appdrawer.fast.database.AppDatabase
 import com.appdrawer.fast.models.AppInfo
+import com.appdrawer.fast.overlay.OverlayService
 import com.appdrawer.fast.repository.AppRepository
 import com.appdrawer.fast.utils.SearchEngine
 import com.appdrawer.fast.viewmodels.MainViewModel
@@ -42,6 +46,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchEngine: SearchEngine
     private lateinit var settingsIcon: ImageView
     
+    // Overlay permission launcher
+    private val overlayPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (Settings.canDrawOverlays(this)) {
+            startOverlayService()
+        } else {
+            showOverlayPermissionDialog()
+        }
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,6 +69,9 @@ class MainActivity : AppCompatActivity() {
         
         // Load apps on first launch and handle permissions
         requestPermissionsAndLoadApps()
+        
+        // Check and request overlay permission
+        checkOverlayPermission()
     }
     
     private fun setupViews() {
@@ -322,5 +340,40 @@ class MainActivity : AppCompatActivity() {
     private fun hideLoadingState() {
         // Hide empty state
         findViewById<LinearLayout>(R.id.emptyState).visibility = View.GONE
+    }
+    
+    private fun checkOverlayPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            showOverlayPermissionDialog()
+        } else {
+            startOverlayService()
+        }
+    }
+    
+    private fun showOverlayPermissionDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Enable Floating Widget")
+            .setMessage("Fast App Drawer needs permission to display over other apps for the floating widget and gesture detection. This enables quick access from anywhere on your device.")
+            .setPositiveButton("Grant Permission") { _, _ ->
+                requestOverlayPermission()
+            }
+            .setNegativeButton("Skip") { _, _ ->
+                Toast.makeText(this, "Floating widget disabled. You can enable it later in settings.", Toast.LENGTH_LONG).show()
+            }
+            .setCancelable(false)
+            .show()
+    }
+    
+    private fun requestOverlayPermission() {
+        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+        intent.data = Uri.parse("package:$packageName")
+        overlayPermissionLauncher.launch(intent)
+    }
+    
+    private fun startOverlayService() {
+        if (Settings.canDrawOverlays(this)) {
+            OverlayService.start(this)
+            Toast.makeText(this, "Floating widget enabled! Swipe up from bottom or tap the floating icon.", Toast.LENGTH_LONG).show()
+        }
     }
 } 

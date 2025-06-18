@@ -11,4 +11,19 @@
         <item>dark</item>
         <item>auto</item>
     </string-array>
+    
+    <!-- Widget position options -->
+    <string-array name="position_entries">
+        <item>Left edge</item>
+        <item>Right edge</item>
+        <item>Top center</item>
+        <item>Bottom center</item>
+    </string-array>
+    
+    <string-array name="position_values">
+        <item>left</item>
+        <item>right</item>
+        <item>top</item>
+        <item>bottom</item>
+    </string-array>
 </resources> 

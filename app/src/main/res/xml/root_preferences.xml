@@ -57,4 +57,44 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Floating Widget">
+        
+        <SwitchPreferenceCompat
+            app:key="enable_floating_widget"
+            app:title="Enable floating widget"
+            app:summary="Show floating search icon on screen"
+            app:defaultValue="true" />
+            
+        <SwitchPreferenceCompat
+            app:key="enable_swipe_gesture"
+            app:title="Enable swipe-up gesture"
+            app:summary="Swipe up from bottom to open app drawer"
+            app:defaultValue="true" />
+            
+        <SwitchPreferenceCompat
+            app:key="gesture_vibration"
+            app:title="Vibration feedback"
+            app:summary="Vibrate when gesture is triggered"
+            app:defaultValue="true" />
+            
+        <ListPreference
+            app:key="widget_position"
+            app:title="Widget position"
+            app:summary="Choose where floating widget appears"
+            app:entries="@array/position_entries"
+            app:entryValues="@array/position_values"
+            app:defaultValue="right"
+            app:useSimpleSummaryProvider="true" />
+            
+        <SeekBarPreference
+            app:key="widget_opacity"
+            app:title="Widget opacity"
+            app:summary="Adjust transparency of floating widget"
+            app:defaultValue="85"
+            app:min="30"
+            app:max="100"
+            app:showSeekBarValue="true" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen> 
