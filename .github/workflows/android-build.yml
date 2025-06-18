@@ -126,6 +126,14 @@ jobs:
     - name: Build debug APK
       run: ./gradlew assembleDebug --stacktrace
 
+    - name: Verify debug APK exists
+      run: |
+        ls -la app/build/outputs/apk/debug/
+        if [ ! -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+          echo "Debug APK not found!"
+          exit 1
+        fi
+
     - name: Upload debug APK
       uses: actions/upload-artifact@v4
       with:
@@ -134,6 +142,14 @@ jobs:
 
     - name: Build release APK
       run: ./gradlew assembleRelease --stacktrace
+
+    - name: Verify release APK exists
+      run: |
+        ls -la app/build/outputs/apk/release/
+        if [ ! -f "app/build/outputs/apk/release/app-release.apk" ]; then
+          echo "Release APK not found!"
+          exit 1
+        fi
 
     - name: Upload release APK
       uses: actions/upload-artifact@v4
@@ -184,7 +200,7 @@ jobs:
     name: Auto Create Release
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [build]
+    needs: [test, lint, build]
 
     steps:
     - name: Checkout code
@@ -207,20 +223,28 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: release-apk
+        path: ./release-artifacts
 
     - name: Download debug APK
       uses: actions/download-artifact@v4
       with:
         name: debug-apk
+        path: ./debug-artifacts
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+    - name: List downloaded artifacts
+      run: |
+        echo "Release artifacts:"
+        ls -la ./release-artifacts/
+        echo "Debug artifacts:"
+        ls -la ./debug-artifacts/
+
+    - name: Create Release with APKs
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.get_version.outputs.tag_name }}
-        release_name: ${{ steps.get_version.outputs.release_name }}
+        name: ${{ steps.get_version.outputs.release_name }}
         body: |
           ## Fast App Drawer ${{ steps.get_version.outputs.version_name }}
           
@@ -229,8 +253,8 @@ jobs:
           - Build number: ${{ steps.get_version.outputs.version_code }}
           
           ### Downloads:
-          - **app-release.apk**: Production-ready APK for installation
-          - **app-debug.apk**: Debug version with additional logging
+          - **FastAppDrawer-${{ steps.get_version.outputs.tag_name }}-release.apk**: Production-ready APK for installation
+          - **FastAppDrawer-${{ steps.get_version.outputs.tag_name }}-debug.apk**: Debug version with additional logging
           
           ### Installation:
           1. Download the release APK
@@ -240,23 +264,13 @@ jobs:
           Built automatically from the latest commit on main branch.
         draft: false
         prerelease: false
+        files: |
+          ./release-artifacts/app-release.apk
+          ./debug-artifacts/app-debug.apk
 
-    - name: Upload Release APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./app-release.apk
-        asset_name: FastAppDrawer-${{ steps.get_version.outputs.tag_name }}-release.apk
-        asset_content_type: application/vnd.android.package-archive
-
-    - name: Upload Debug APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./app-debug.apk
-        asset_name: FastAppDrawer-${{ steps.get_version.outputs.tag_name }}-debug.apk
-        asset_content_type: application/vnd.android.package-archive 
+    - name: Rename and organize release assets
+      run: |
+        mkdir -p release-files
+        cp ./release-artifacts/app-release.apk ./release-files/FastAppDrawer-${{ steps.get_version.outputs.tag_name }}-release.apk
+        cp ./debug-artifacts/app-debug.apk ./release-files/FastAppDrawer-${{ steps.get_version.outputs.tag_name }}-debug.apk
+        ls -la ./release-files/ 
