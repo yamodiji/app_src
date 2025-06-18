@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#2196F3</color>
-    <color name="primary_dark">#1976D2</color>
-    <color name="accent">#FF5722</color>
-    <color name="background">#F5F5F5</color>
+    <!-- Modern Material Design Colors -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="accent">#FF6B35</color>
+    
+    <!-- Light theme -->
+    <color name="background">#FAFAFA</color>
     <color name="surface">#FFFFFF</color>
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
@@ -15,4 +18,9 @@
     <color name="surface_dark">#1E1E1E</color>
     <color name="text_primary_dark">#FFFFFF</color>
     <color name="text_secondary_dark">#B3B3B3</color>
+    <color name="divider_dark">#2C2C2C</color>
+    
+    <!-- Section colors -->
+    <color name="favorite_section_bg">#F8F9FA</color>
+    <color name="recent_section_bg">#F5F5F5</color>
 </resources> 

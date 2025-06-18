@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +17,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.activity.OnBackPressedCallback
 import com.appdrawer.fast.adapters.AppAdapter
+import com.appdrawer.fast.adapters.FavoriteAppAdapter
 import com.appdrawer.fast.database.AppDatabase
 import com.appdrawer.fast.models.AppInfo
 import com.appdrawer.fast.repository.AppRepository
@@ -29,9 +33,14 @@ class MainActivity : AppCompatActivity() {
     
     private lateinit var searchEditText: EditText
     private lateinit var recyclerView: RecyclerView
+    private lateinit var favoriteAppsRecyclerView: RecyclerView
+    private lateinit var recentAppsRecyclerView: RecyclerView
     private lateinit var appAdapter: AppAdapter
+    private lateinit var favoriteAppAdapter: FavoriteAppAdapter
+    private lateinit var recentAppAdapter: AppAdapter
     private lateinit var viewModel: MainViewModel
     private lateinit var searchEngine: SearchEngine
+    private lateinit var settingsIcon: ImageView
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +61,14 @@ class MainActivity : AppCompatActivity() {
     private fun setupViews() {
         searchEditText = findViewById(R.id.searchEditText)
         recyclerView = findViewById(R.id.recyclerView)
+        favoriteAppsRecyclerView = findViewById(R.id.favoriteAppsRecyclerView)
+        recentAppsRecyclerView = findViewById(R.id.recentAppsRecyclerView)
+        settingsIcon = findViewById(R.id.settingsIcon)
         
-        // Set up toolbar
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.app_name)
+        // Set up settings click
+        settingsIcon.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
         
         // Focus on search box when activity starts
         searchEditText.requestFocus()
@@ -71,29 +83,64 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun setupRecyclerView() {
+        // Setup favorite apps adapter with grid layout
+        favoriteAppAdapter = FavoriteAppAdapter(
+            onAppClick = { app -> launchApp(app) },
+            onAppLongClick = { app -> showAppOptions(app) }
+        )
+        
+        favoriteAppsRecyclerView.apply {
+            layoutManager = GridLayoutManager(this@MainActivity, 4)
+            adapter = favoriteAppAdapter
+        }
+        
+        // Setup recent apps adapter with grid layout
+        recentAppAdapter = AppAdapter(
+            onAppClick = { app -> launchApp(app) },
+            onAppLongClick = { app -> showAppOptions(app) }
+        )
+        
+        recentAppsRecyclerView.apply {
+            layoutManager = GridLayoutManager(this@MainActivity, 4)
+            adapter = recentAppAdapter
+        }
+        
+        // Setup all apps adapter
         appAdapter = AppAdapter(
             onAppClick = { app -> launchApp(app) },
             onAppLongClick = { app -> showAppOptions(app) }
         )
         
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = GridLayoutManager(this@MainActivity, 4)
             adapter = appAdapter
         }
         
-        // Observe all apps
+        // Observe all apps and organize into sections
         viewModel.allApps.observe(this) { apps ->
             if (searchEditText.text.isEmpty()) {
-                // Show favorite apps when no search query
-                val favoriteApps = apps.filter { it.isFavorite }
-                if (favoriteApps.isNotEmpty()) {
-                    appAdapter.submitList(favoriteApps)
-                } else {
-                    // Show recent apps if no favorites
-                    appAdapter.submitList(apps.take(10))
-                }
+                organizeSections(apps)
             }
         }
+    }
+    
+    private fun organizeSections(apps: List<AppInfo>) {
+        val favoriteApps = apps.filter { it.isFavorite }
+        val recentApps = apps.filter { !it.isFavorite && it.lastUsed > 0 }
+            .sortedByDescending { it.lastUsed }
+            .take(8)
+        val otherApps = apps.filter { !it.isFavorite && !recentApps.contains(it) }
+            .sortedBy { it.appName }
+        
+        favoriteAppAdapter.submitList(favoriteApps)
+        recentAppAdapter.submitList(recentApps)
+        appAdapter.submitList(otherApps)
+        
+        // Show/hide sections based on content
+        findViewById<LinearLayout>(R.id.favoriteSection).visibility = 
+            if (favoriteApps.isNotEmpty()) View.VISIBLE else View.GONE
+        findViewById<LinearLayout>(R.id.recentSection).visibility = 
+            if (recentApps.isNotEmpty()) View.VISIBLE else View.GONE
     }
     
     private fun setupSearch() {
@@ -112,14 +159,20 @@ class MainActivity : AppCompatActivity() {
     private fun performSearch(query: String) {
         viewModel.allApps.value?.let { apps ->
             if (query.isEmpty()) {
-                // Show favorites or recent apps
-                val favoriteApps = apps.filter { it.isFavorite }
-                if (favoriteApps.isNotEmpty()) {
-                    appAdapter.submitList(favoriteApps)
-                } else {
-                    appAdapter.submitList(apps.take(10))
-                }
+                // Show organized sections
+                organizeSections(apps)
+                // Show all sections
+                findViewById<LinearLayout>(R.id.favoriteSection).visibility = 
+                    if (apps.any { it.isFavorite }) View.VISIBLE else View.GONE
+                findViewById<LinearLayout>(R.id.recentSection).visibility = 
+                    if (apps.any { !it.isFavorite && it.lastUsed > 0 }) View.VISIBLE else View.GONE
+                findViewById<LinearLayout>(R.id.allAppsSection).visibility = View.VISIBLE
             } else {
+                // Hide sections and show search results
+                findViewById<LinearLayout>(R.id.favoriteSection).visibility = View.GONE
+                findViewById<LinearLayout>(R.id.recentSection).visibility = View.GONE
+                findViewById<LinearLayout>(R.id.allAppsSection).visibility = View.VISIBLE
+                
                 // Perform search
                 val searchResults = searchEngine.search(query, apps)
                 val resultApps = searchResults.map { it.app }
@@ -210,27 +263,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-    
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_refresh -> {
-                lifecycleScope.launch {
-                    viewModel.refreshApps()
-                    Toast.makeText(this@MainActivity, "Apps refreshed", Toast.LENGTH_SHORT).show()
-                }
-                true
-            }
-            R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+
     
     private fun setupBackPress() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
