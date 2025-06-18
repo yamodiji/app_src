@@ -86,7 +86,7 @@
             app:defaultValue="right"
             app:useSimpleSummaryProvider="true" />
             
-        <SeekBarPreference
+        <androidx.preference.SeekBarPreference
             app:key="widget_opacity"
             app:title="Widget opacity"
             app:summary="Adjust transparency of floating widget"
