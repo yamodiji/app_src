@@ -26,4 +26,29 @@
         <item>top</item>
         <item>bottom</item>
     </string-array>
+    
+    <!-- Widget opacity options -->
+    <string-array name="opacity_entries">
+        <item>30% - Very transparent</item>
+        <item>40% - Transparent</item>
+        <item>50% - Half transparent</item>
+        <item>60% - Slightly transparent</item>
+        <item>70% - Mostly opaque</item>
+        <item>80% - Nearly opaque</item>
+        <item>85% - Default</item>
+        <item>90% - Almost solid</item>
+        <item>100% - Solid</item>
+    </string-array>
+    
+    <string-array name="opacity_values">
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>100</item>
+    </string-array>
 </resources> 
