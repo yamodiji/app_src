@@ -46,7 +46,7 @@ jobs:
       if: success() || failure()
       with:
         name: Unit Test Results
-        path: '**/build/test-results/test/TEST-*.xml'
+        path: 'app/build/test-results/testDebugUnitTest/TEST-*.xml'
         reporter: java-junit
 
   lint:
@@ -82,7 +82,7 @@ jobs:
       run: ./gradlew lintDebug --stacktrace
 
     - name: Upload lint results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: lint-results
@@ -122,7 +122,7 @@ jobs:
       run: ./gradlew assembleDebug --stacktrace
 
     - name: Upload debug APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/app-debug.apk
@@ -137,7 +137,7 @@ jobs:
 
     - name: Upload release APK
       if: github.event_name == 'release'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-apk
         path: app/build/outputs/apk/release/app-release.apk
@@ -189,7 +189,7 @@ jobs:
 
     steps:
     - name: Download release APK
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: release-apk
 
