@@ -56,7 +56,7 @@ jobs:
         reporter: java-junit
         
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results
@@ -95,7 +95,7 @@ jobs:
       run: ./gradlew lintDebug --no-daemon --stacktrace
       
     - name: Upload lint results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: lint-results
@@ -133,7 +133,7 @@ jobs:
       run: ./gradlew assembleDebug --no-daemon --stacktrace
       
     - name: Upload debug APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
@@ -171,7 +171,7 @@ jobs:
       run: ./gradlew assembleRelease --no-daemon --stacktrace
       
     - name: Upload unsigned APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-apk-unsigned
         path: app/build/outputs/apk/release/*.apk
@@ -277,7 +277,7 @@ jobs:
         script: ./gradlew connectedDebugAndroidTest --no-daemon --stacktrace
         
     - name: Upload instrumented test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: instrumented-test-results-api-${{ matrix.api-level }}
