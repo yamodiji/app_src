@@ -1,149 +1,152 @@
 # Fast App Drawer
 
-A lightning-fast, customizable app drawer for Android that lets you search and launch apps quickly and efficiently.
+A powerful Android app drawer with floating widget, gesture controls, and smart search capabilities.
 
-## Features
+## 🚀 Features
 
-🔍 **Smart Search Engine**
-- Fuzzy matching - find apps even with typos
-- T9 search - use number keypad like old phones
-- Package name matching
-- Custom aliases for apps
-- Multiple search algorithms with intelligent scoring
+- **🎯 Floating Widget**: Always-on-screen draggable search widget
+- **🌊 Gesture Control**: Swipe-up from home screen to open app drawer
+- **⚡ Smart Search**: Live filtering with advanced search algorithms
+- **📱 Overlay Interface**: Full-screen transparent app drawer
+- **⚙️ Comprehensive Settings**: Customizable appearance and behavior
+- **🎨 Material Design 3**: Modern, beautiful user interface
 
-⭐ **App Management**
-- Mark apps as favorites for quick access
-- Hide unwanted apps from the drawer
-- Usage tracking and smart suggestions
-- Long-press for app options menu
+## 🔧 GitHub Actions Workflows
 
-🎨 **Customization**
-- Material Design 3 with modern UI
-- Light, dark, and auto themes
-- Customizable search behavior
-- Clean, ad-free interface
+This project uses **GitHub Actions for all building, testing, and deployment**. No local setup required!
 
-🚀 **Performance**
-- Fast app launching with usage tracking
-- Efficient database storage with Room
-- Smooth animations and transitions
-- Minimal resource usage
+### Available Workflows
 
-📱 **Integration**
-- Home screen widget for quick access
-- Assistant integration (digital assistant)
-- No unnecessary permissions
-- Completely free and open-source
+#### 1. **Build and Test** (Automatic)
+- **Triggers**: Push to `main`/`develop`, Pull Requests
+- **What it does**: 
+  - Runs unit tests
+  - Performs Android lint checks
+  - Builds debug APK
+  - Builds & signs release APK (main branch only)
+  - Creates GitHub releases automatically
+- **Location**: `.github/workflows/build-and-test.yml`
 
-## Key Components
+#### 2. **Build APK (Manual)** 
+- **Triggers**: Manual dispatch from GitHub Actions tab
+- **What it does**: Quick APK building without tests
+- **Options**: Choose debug or release build
+- **Location**: `.github/workflows/build-apk.yml`
 
-### Search Engine (`SearchEngine.kt`)
-Advanced search algorithm supporting:
-- **Exact matches** (highest priority)
-- **Alias matching** (custom shortcuts)
-- **Start-of-name matching**
-- **Contains matching**
-- **Package name search**
-- **T9 keypad search** (2=ABC, 3=DEF, etc.)
-- **Fuzzy matching** with Levenshtein distance
+#### 3. **Test Only**
+- **Triggers**: Manual dispatch or test file changes
+- **What it does**: Runs only unit tests for quick feedback
+- **Location**: `.github/workflows/test-only.yml`
 
-### Database (`AppDatabase.kt`)
-Room database for persistent storage:
-- App metadata and preferences
-- Favorites and hidden apps
-- Usage statistics and last used timestamps
-- Custom aliases and icon paths
+## 📱 Getting the APK
 
-### Repository (`AppRepository.kt`)
-Data layer handling:
-- Installed app discovery
-- App launching and usage tracking
-- Favorites and hidden app management
-- Database synchronization
+### Method 1: GitHub Releases (Recommended)
+1. Go to the [Releases](../../releases) page
+2. Download the latest APK file
+3. Install on your Android device
 
-## Installation
+### Method 2: Build Manually
+1. Go to [Actions](../../actions) tab
+2. Click "Build APK (Manual)"
+3. Click "Run workflow"
+4. Choose debug or release
+5. Download from Artifacts section
 
-1. Clone this repository
-2. Open in Android Studio
-3. Build and install on your Android device
-4. Grant necessary permissions when prompted
+### Method 3: Automatic Builds
+- Every push to `main` branch automatically creates a new release
+- Check the [Actions](../../actions) tab for build status
+- Releases appear in the [Releases](../../releases) section
 
-## Permissions
+## 🔍 Testing
 
-- `QUERY_ALL_PACKAGES` - To discover all installed apps
-- `DEVICE_POWER` - For assistant integration (optional)
+### Running Tests
+1. Go to [Actions](../../actions) tab
+2. Click "Test Only" workflow
+3. Click "Run workflow"
+4. View test results in the workflow run
 
-## Usage
+### Test Reports
+- Unit test results are automatically published
+- Test reports available in workflow artifacts
+- Failed tests are highlighted in the workflow summary
 
-### Basic Search
-- Type any part of an app name
-- Use numbers for T9 search (e.g., 2662 for "AMOC")
-- Search by package name (e.g., "com.android")
+## 🛠️ Development Workflow
 
-### App Management
-- **Tap** - Launch app
-- **Long press** - Show options menu
-  - Add/remove favorites
-  - Hide/show app
-  - Set custom alias
-  - View app info
+### Making Changes
+1. Create a new branch: `git checkout -b feature/your-feature`
+2. Make your changes
+3. Push to GitHub: `git push origin feature/your-feature`
+4. Create a Pull Request
+5. GitHub Actions will automatically test your changes
+6. Merge to `main` when tests pass
 
-### Aliases
-Create custom shortcuts for apps:
-- Set "fb" as alias for "Facebook"
-- Set "gm" as alias for "Gmail"
-- Use any text that's easier to remember
+### Viewing Build Status
+- Check the [Actions](../../actions) tab for all workflow runs
+- Green checkmark ✅ = Build successful
+- Red X ❌ = Build failed (check logs for details)
+- Yellow circle 🟡 = Build in progress
 
-### Widget
-Add the search widget to your home screen for instant access to the app drawer.
+## 📋 Build Information
 
-## Architecture
-
-The app follows MVVM architecture with:
-- **View**: Activities and Fragments
-- **ViewModel**: Business logic and data binding
-- **Repository**: Data source abstraction
-- **Database**: Room for local storage
-- **Utils**: Search engine and helper classes
-
-## Customization
-
-Access settings through the menu to customize:
-- Search behavior (fuzzy, T9, package names)
-- Display options (themes, favorite icons)
-- App behavior (auto-close, recent apps)
-
-## Performance Tips
-
-- The app loads and caches installed apps on first launch
-- Search results are scored and sorted by relevance and usage
-- Database operations are optimized for fast queries
-- UI updates use DiffUtil for efficient RecyclerView updates
-
-## Contributing
-
-This app is built to be similar to popular app launcher apps like "App Search: Launch apps fast" while adding modern Android development practices and additional features.
-
-Feel free to:
-- Report bugs
-- Suggest features
-- Submit pull requests
-- Improve documentation
-
-## License
-
-This project is open-source and available under the MIT License.
-
-## Technical Details
-
-- **Min SDK**: 21 (Android 5.0)
-- **Target SDK**: 34 (Android 14)
-- **Language**: Kotlin
+- **Target SDK**: Android 34 (API level 34)
+- **Minimum SDK**: Android 24 (API level 24)
 - **Architecture**: MVVM with Repository pattern
-- **Database**: Room
-- **UI**: Material Design 3
-- **Build System**: Gradle
+- **Database**: Room for local storage
+- **UI**: Material Design 3 components
+- **Language**: Kotlin 100%
+
+## 🔐 Permissions Required
+
+- `SYSTEM_ALERT_WINDOW`: For floating widget overlay
+- `BIND_ACCESSIBILITY_SERVICE`: For gesture detection
+- `PACKAGE_USAGE_STATS`: For app usage tracking
+- `VIBRATE`: For haptic feedback
+- `FOREGROUND_SERVICE`: For background services
+
+## 📂 Project Structure
+
+```
+app/src/main/
+├── java/com/appdrawer/fast/
+│   ├── adapters/          # RecyclerView adapters
+│   ├── database/          # Room database
+│   ├── models/           # Data models
+│   ├── overlay/          # Floating widget & overlay
+│   ├── repository/       # Data repository
+│   ├── utils/           # Utility classes
+│   ├── viewmodels/      # MVVM ViewModels
+│   └── MainActivity.kt   # Main activity
+├── res/                 # Resources (layouts, drawables, etc.)
+└── AndroidManifest.xml  # App configuration
+```
+
+## 🚦 Workflow Status
+
+[![Build and Test](../../actions/workflows/build-and-test.yml/badge.svg)](../../actions/workflows/build-and-test.yml)
+[![Test Only](../../actions/workflows/test-only.yml/badge.svg)](../../actions/workflows/test-only.yml)
+
+## 💡 Usage Tips
+
+1. **First Launch**: Grant overlay permission when prompted
+2. **Gesture Setup**: Enable accessibility service for swipe gestures
+3. **Widget Position**: Drag the floating widget to your preferred location
+4. **Search**: Type to search, use space for multiple keywords
+5. **App Options**: Long-press apps for favorite/hide options
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Push to GitHub (tests will run automatically)
+5. Create a Pull Request
+6. Wait for GitHub Actions to validate your changes
+7. Merge when approved
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-*Created as a modern, efficient alternative to traditional app drawers with advanced search capabilities and customization options.* 
+**Note**: This project uses GitHub Actions for all development workflows. No local Android development environment is required for contributing! 
